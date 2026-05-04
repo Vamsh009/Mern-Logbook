@@ -34,7 +34,7 @@ const HomePage = () => {
       <Navbar />
 
       <div className='max-w-7xl mx-auto p-4 mt-6'>
-        {loading && <div className='text-center text-primary py-10'>Loading notes...</div>}
+        {loading && <div className='text-center text-[#e7d8bd] py-10'>Loading notes...</div>}
 
         {notes.length === 0 && !loading && <NoteNotFound/>}
 

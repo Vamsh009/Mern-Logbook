@@ -27,28 +27,28 @@ const NoteCard = ({note, setNotes}) => {
 
   return (
     <Link to={`/note/${note._id}`} 
-    className = "card bg-base-100 hover:shadow-lg transition-all duration-200 border-t-4 border-solid border-[#00FF9D] "
+    className = "card rounded-2xl overflow-hidden bg-slate-900 hover:shadow-xl hover:shadow-slate-950/30 transition-all duration-200 border-t-4 border-solid border-[#e7d8bd] "
     
     > 
-      <div className='card-body'>
-        <h3 className=' card-title text-base-content'>{note.title}</h3>
-        <p className='text-base-content/70 line-clamp-3'>{note.content}</p>
+      <div className='card-body '>
+        <h3 className=' card-title text-slate-50'>{note.title}</h3>
+        <p className='text-slate-300 line-clamp-3'>{note.content}</p>
         <div className='flex flex-wrap gap-2 mt-4'>
           {note.tags.map((tag, index) => (
             <span
               key={index}
-              className='text-md text-base-content/150'
+              className='text-md text-[#e7d8bd]'
             >
               #{tag}
 
             </span>
           ))}
         </div>
-        <div className='card-actions justify-between item-center mt-4'>
-          <span className='text-sm text-base-content/60'>
+        <div className='card-actions justify-between items-center mt-4'>
+          <span className='text-sm text-slate-400'>
             {formatDate(new Date(note.createdAt))}
           </span>
-          <div className='flex items-center gap-1'>
+          <div className='flex items-center gap-1 text-slate-300'>
             <PenSquareIcon className='size-4' />
             <button className='btn btn-ghost btn-xs  text-error' onClick={(e)=>handleDelete(e,note._id)}>
               <Trash2Icon className='size-4' />
