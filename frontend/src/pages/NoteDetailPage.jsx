@@ -9,6 +9,7 @@ const NoteDetailPage = () => {
   const [note , setNote] = useState(null);
   const [loading , setLoading] = useState(true);
   const [saving , setSaving] = useState(false);
+  const [tagInput , setTagInput] = useState(null);
 
   const navigate = useNavigate();
 
@@ -46,6 +47,9 @@ const NoteDetailPage = () => {
 
   const handleSave = async (e) => {
     e.preventDefault()
+    
+    const tagsArray = tagInput.split(',').map(tag => tag.trim()).filter(tag=>tag !=='')
+
 
     if (!note.title.trim() || !note.content.trim()) {
       toast.error("All fields are required")
@@ -57,6 +61,8 @@ const NoteDetailPage = () => {
       await api.put(`/notes/${id}`, {
         title: note.title,
         content: note.content,
+        tags: tagsArray
+        
       })
       toast.success("Note updated successfully")
       navigate("/")
@@ -125,9 +131,16 @@ const NoteDetailPage = () => {
                     onChange={(e) => setNote({ ...note, content: e.target.value })}
                   />
                 </div>
+                <input 
+                  type='text'
+                  placeholder='Add tags(eg ideas, work, personal)'
+                  value={tagInput}
+                  onChange={(e)=> setTagInput(e.target.value)}
+                  className='input input-bordered w-full bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-[#e7d8bd] focus:outline-none'
+                />
 
-                <div className='card-actions justify-end'>
-                  <button type='submit' className='btn rounded-xl border-0 bg-[#e7d8bd] px-5 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400' disabled={saving}>
+                <div className='card-actions justify-end py-5'>
+                  <button type='submit' className='btn rounded-xl border-0 bg-[#e7d8bd] px-5  text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400' disabled={saving}>
                     <SaveIcon className='size-5' />
                     {saving ? "Saving..." : "Save Changes"}
                   </button>
