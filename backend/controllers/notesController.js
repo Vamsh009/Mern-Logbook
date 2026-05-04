@@ -26,8 +26,8 @@ export async function getNotesById (req, res)  {
 
 export async function createNotes (req, res)  {
     try{
-        const {title, content} = req.body;
-        const note = new Note({title, content});
+        const {title, content,tags} = req.body;
+        const note = new Note({title, content , tags: tags || []});
         const savednote = await note.save();
         res.status(201).json(savednote);
     } catch(error){
@@ -40,8 +40,8 @@ export async function createNotes (req, res)  {
    
 export async function updateNotes (req, res)  {
   try{
-    const {title, content} = req.body;
-    const updateNote = await Note.findByIdAndUpdate(req.params.id,{title, content}, {new: true});
+    const {title, content,tags} = req.body;
+    const updateNote = await Note.findByIdAndUpdate(req.params.id,{title, content , tags: tags||[]}, {new: true});
     if(!updateNote){
       return res.status(404).json({message:"Note not found"});
     }

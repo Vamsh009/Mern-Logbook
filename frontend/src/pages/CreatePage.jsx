@@ -9,11 +9,14 @@ const CreatePage = () => {
   const [title , setTitle] = useState("")
   const [content , setContent] = useState("")
   const [loading , setLoading] = useState(false)
+  const [tagInput , setTagInput] = useState("")
 
   const navigate = useNavigate()
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+
+    const tagsArray = tagInput.split(',').map(tag => tag.trim()).filter(tag=>tag !=='')
 
     if (!title.trim() || !content.trim()) {
       toast.error("All fields are required")
@@ -22,7 +25,7 @@ const CreatePage = () => {
     }
     setLoading(true)
     try {
-      await api.post("/notes", { title, content })
+      await api.post("/notes", { title, content , tags:tagsArray })
       toast.success("Note created successfully")
       navigate("/");
     } catch (error) {
@@ -69,6 +72,13 @@ const CreatePage = () => {
                     onChange={(e) => setContent(e.target.value)}
                   />
                 </div>
+                <input 
+                  type='text'
+                  placeholder='Add tags(eg ideas, work, personal)'
+                  value={tagInput}
+                  onChange={(e)=> setTagInput(e.target.value)}
+                  className='input input-bordered'
+                />
                 <div className="card-actions justify-end">
                   <button type='submit' className='btn btn-primary' disabled={loading} >
                     {loading ? "Creating..." : "Create Note"}
@@ -78,6 +88,7 @@ const CreatePage = () => {
             </div>
 
           </div>
+
 
         </div>
 
