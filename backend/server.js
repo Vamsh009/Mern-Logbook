@@ -8,6 +8,7 @@ import path from 'path'
 import notesRoute from './routes/notesRoute.js';
 import { connectDB } from './config/db.js';
 import ratelimiter from './middleware/rateLimiter.js';
+import authRoutes from './routes/authRoutes.js';  
 
 
 dotenv.config();
@@ -35,7 +36,7 @@ app.use((req, res, next) => {
 
 //  app.use('/api' , ratelimiter); // Apply the rate limiter middleware to all routes
 
-
+app.use('/api/auth', authRoutes);
 app.use('/api/notes', notesRoute);
 
 if(process.env.NODE_ENV === "production"){
