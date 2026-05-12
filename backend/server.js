@@ -8,7 +8,7 @@ import path from 'path'
 import notesRoute from './routes/notesRoute.js';
 import { connectDB } from './config/db.js';
 import ratelimiter from './middleware/rateLimiter.js';
-import authRoutes from './routes/authRoutes.js';  
+import authRoutes from './routes/authRoutes.js';
 
 
 dotenv.config();
@@ -22,11 +22,12 @@ const __dirname = path.resolve();
 
 app.use(express.json());//middleware allows to parse JSON bodies
 
-if(process.env.NODE_ENV !== "production"){
+if (process.env.NODE_ENV !== "production") {
 
   app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
-  })); // Enable CORS for all routes
+    origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow requests from both local dev ports
+    credentials: true,
+  }));
 }
 
 app.use((req, res, next) => {
@@ -39,12 +40,12 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', notesRoute);
 
-if(process.env.NODE_ENV === "production"){
-  app.use(express.static(path.join(__dirname,"../frontend/dist")))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")))
 
-  app.get("*" , (req,res)=>{
-    res.sendFile(path.join(__dirname,"../frontend","dist","index.html"));
-});
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
 }
 
 

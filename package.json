@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Vamsh009/Mern-ThinkBoard/issues"
   },
-  "homepage": "https://github.com/Vamsh009/Mern-ThinkBoard#readme"
+  "homepage": "https://github.com/Vamsh009/Mern-ThinkBoard#readme",
+  "dependencies": {
+    "react-router-dom": "^7.15.0"
+  }
 }

@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../lib/axios'
 import { ArrowLeftIcon, SaveIcon, Trash2Icon } from 'lucide-react'
 import Navbar from '../components/Navbar'
 
 const NoteDetailPage = () => {
-  const [note , setNote] = useState(null);
-  const [loading , setLoading] = useState(true);
-  const [saving , setSaving] = useState(false);
-  const [tagInput , setTagInput] = useState(null);
+  const [note, setNote] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [tagInput, setTagInput] = useState('');
 
   const navigate = useNavigate();
 
   const { id } = useParams();
 
-  useEffect( ()=>{
-    const fetchnote = async()=>{
+  useEffect(() => {
+    const fetchnote = async () => {
       try {
         const res = await api.get(`/notes/${id}`)
         setNote(res.data);
+        setTagInput(res.data.tags?.join(', ') || '');
       } catch (error) {
         console.log("Error fetching note details:", error)
         toast.error("Failed to fetch note details. Please try again.")
@@ -28,10 +29,10 @@ const NoteDetailPage = () => {
       }
     }
     fetchnote();
-  },[id])
+  }, [id])
 
   const handleDelete = async () => {
-    if(!window.confirm("Are you sure you want to delete this note?")) {
+    if (!window.confirm("Are you sure you want to delete this note?")) {
       return;
     }
 
@@ -47,8 +48,8 @@ const NoteDetailPage = () => {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    
-    const tagsArray = tagInput.split(',').map(tag => tag.trim()).filter(tag=>tag !=='')
+
+    const tagsArray = tagInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
 
 
     if (!note.title.trim() || !note.content.trim()) {
@@ -62,7 +63,7 @@ const NoteDetailPage = () => {
         title: note.title,
         content: note.content,
         tags: tagsArray
-        
+
       })
       toast.success("Note updated successfully")
       navigate("/")
@@ -74,13 +75,13 @@ const NoteDetailPage = () => {
     }
   }
 
-  if(loading){
+  if (loading) {
     return <div className='min-h-screen flex items-center justify-center'>
       <span className='loading loading-spinner loading-lg text-[#e7d8bd]'></span>
     </div>
   }
 
-  if(!note){
+  if (!note) {
     return <div className='min-h-screen flex items-center justify-center'>
       <div className='text-center'>
         <h2 className='text-2xl font-bold mb-4 text-slate-50'>Note not found</h2>
@@ -90,18 +91,18 @@ const NoteDetailPage = () => {
   }
 
   return (
-   <div className='min-h-screen'>
+    <div className='min-h-screen'>
       <Navbar />
       <div className='container mx-auto px-4 py-8'>
         <div className="max-w-2xl mx-auto">
 
           <div className='flex items-center justify-between mb-6'>
             <Link to={"/"} className='btn btn-ghost text-slate-300 hover:bg-slate-800 hover:text-[#f1e5d0]'>
-                <ArrowLeftIcon className='size-5' />
-                Back to Home
+              <ArrowLeftIcon className='size-5' />
+              Back to Home
             </Link>
             <button onClick={handleDelete} className='btn btn-outline rounded-xl border-red-400/70 text-red-300 hover:border-red-500 hover:bg-red-500 hover:text-white'>
-              <Trash2Icon className='h-5 w-5'/>
+              <Trash2Icon className='h-5 w-5' />
 
             </button>
           </div>
@@ -131,11 +132,11 @@ const NoteDetailPage = () => {
                     onChange={(e) => setNote({ ...note, content: e.target.value })}
                   />
                 </div>
-                <input 
+                <input
                   type='text'
                   placeholder='Add tags(eg ideas, work, personal)'
                   value={tagInput}
-                  onChange={(e)=> setTagInput(e.target.value)}
+                  onChange={(e) => setTagInput(e.target.value)}
                   className='input input-bordered w-full bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-[#e7d8bd] focus:outline-none'
                 />
 
@@ -150,7 +151,7 @@ const NoteDetailPage = () => {
           </div>
         </div>
       </div>
-   </div>          
+    </div>
 
   )
 }

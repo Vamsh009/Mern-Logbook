@@ -52,8 +52,8 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" })
     }
-    const isPasswaordValid = await bcryptjs.compare(password, user.password);
-    if (!isPasswaordValid) {
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid credentials" })
     }
     const token = jwt.sign(
@@ -76,18 +76,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/me", authMiddleware, async(req,res)=> {
-  try{
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
     res.status(200).json({
-      user:{
+      user: {
         id: req.user._id,
         username: req.user.username,
         email: req.user.useremail
-      } 
+      }
     });
-  }catch(error){
+  } catch (error) {
     console.error("Error in get user details:", error);
-    res.status(500).json({message:"Server error"});
+    res.status(500).json({ message: "Server error" });
   }
 });
 
