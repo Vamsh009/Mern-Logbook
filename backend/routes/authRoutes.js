@@ -8,16 +8,23 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const username = req.body.username?.trim();
+    const email = req.body.email?.trim().toLowerCase();
+    const { password } = req.body;
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
     if (password.length < 6) {
       return res.status(400).json({ message: "Password must be at least 6 characters long" });
     }
-    const existingUser = await User.findOne({ useremail: email });
+    const existingUser = await User.findOne({
+      $or: [{ useremail: email }, { username }]
+    });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      const message = existingUser.useremail === email
+        ? "Email already exists"
+        : "Username already exists";
+      return res.status(400).json({ message });
     }
     const hashedPassword = await bcryptjs.hash(password, 10);
     const newUser = new User({ username, useremail: email, password: hashedPassword });
@@ -37,6 +44,13 @@ router.post("/register", async (req, res) => {
     });
   } catch (error) {
     console.error("Error in user registration:", error);
+    if (error.code === 11000) {
+      const duplicateField = Object.keys(error.keyPattern || {})[0];
+      const message = duplicateField === "username"
+        ? "Username already exists"
+        : "Email already exists";
+      return res.status(400).json({ message });
+    }
     res.status(500).json({ message: "Server error" });
   }
 
@@ -44,17 +58,27 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = req.body.email?.trim().toLowerCase();
+    const { password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" })
     }
-    const user = await User.findOne({ useremail: email });
+    const user = await User.findOne({
+      $or: [{ useremail: email }, { email }]
+    });
     if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" })
+    }
+    if (!user.password) {
       return res.status(400).json({ message: "Invalid credentials" })
     }
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid credentials" })
+    }
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is missing");
+      return res.status(500).json({ message: "Server configuration error" });
     }
     const token = jwt.sign(
       { id: user._id, username: user.username },
@@ -66,7 +90,7 @@ router.post("/login", async (req, res) => {
       user: {
         id: user._id,
         username: user.username,
-        email: user.useremail
+        email: user.useremail || user.email
       },
       token: token
     });

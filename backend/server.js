@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from "dotenv";
 import path from 'path'
+import { fileURLToPath } from 'url';
 
 
 import notesRoute from './routes/notesRoute.js';
@@ -11,14 +12,16 @@ import ratelimiter from './middleware/rateLimiter.js';
 import authRoutes from './routes/authRoutes.js';
 
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const __dirname = path.resolve();
 
 app.use(express.json());//middleware allows to parse JSON bodies
 
