@@ -28,7 +28,24 @@ app.use(express.json());//middleware allows to parse JSON bodies
 if (process.env.NODE_ENV !== "production") {
 
   app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow requests from both local dev ports
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      try {
+        const { hostname } = new URL(origin);
+        const allowedHosts = ["localhost", "127.0.0.1"];
+
+        if (allowedHosts.includes(hostname)) {
+          return callback(null, true);
+        }
+      } catch (error) {
+        return callback(error);
+      }
+
+      return callback(new Error(`CORS blocked origin: ${origin}`));
+    },
     credentials: true,
   }));
 }
