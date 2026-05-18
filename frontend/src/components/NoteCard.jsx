@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom'
 import { formatDate } from '../lib/utils'
 import api from '../lib/axios'
 import toast from 'react-hot-toast'
+import DOMPurify from 'dompurify';
 
 const NoteCard = ({ note, setNotes }) => {
 
+  const cleanHTML = DOMPurify.sanitize(note.content);
   const handleDelete = async (e, id) => {
     e.preventDefault();
     e.stopPropagation();
@@ -32,7 +34,10 @@ const NoteCard = ({ note, setNotes }) => {
     >
       <div className='card-body '>
         <h3 className=' card-title text-slate-50'>{note.title}</h3>
-        <p className='text-slate-300 line-clamp-3'>{note.content}</p>
+        <div 
+          className="mt-2 text-gray-700 quill-content"
+          dangerouslySetInnerHTML={{ __html: cleanHTML }} 
+        />
         <div className='flex flex-wrap gap-2 mt-4'>
           {note.tags.map((tag, index) => (
             <span

@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../lib/axios'
 import Navbar from '../components/Navbar'
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 
 const CreatePage = () => {
@@ -67,11 +69,11 @@ const CreatePage = () => {
                   <label className="label">
                     <span className='label-text text-slate-300'>Content</span>
                   </label>
-                  <textarea
-                    placeholder='Write your note here...'
-                    className='textarea textarea-bordered h-32 bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-[#e7d8bd] focus:outline-none'
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                  <ReactQuill 
+                    theme="snow" 
+                    value={content} 
+                    onChange={setContent} 
+                    className="h-64 mb-12" 
                   />
                 </div>
                 <input

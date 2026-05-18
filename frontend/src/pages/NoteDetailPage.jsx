@@ -4,9 +4,12 @@ import toast from 'react-hot-toast'
 import api from '../lib/axios'
 import { ArrowLeftIcon, SaveIcon, Trash2Icon } from 'lucide-react'
 import Navbar from '../components/Navbar'
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [tagInput, setTagInput] = useState('');
@@ -50,9 +53,10 @@ const NoteDetailPage = () => {
     e.preventDefault()
 
     const tagsArray = tagInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+    const plainTextContent = note.content?.replace(/<[^>]*>?/gm, '') || '';
 
 
-    if (!note.title.trim() || !note.content.trim()) {
+    if (!note.title.trim() || !plainTextContent.trim()) {
       toast.error("All fields are required")
       return
     }
@@ -126,10 +130,11 @@ const NoteDetailPage = () => {
                   <label className='label'>
                     <span className='label-text text-slate-300'>Content</span>
                   </label>
-                  <textarea
-                    className='textarea textarea-bordered h-32 bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-[#e7d8bd] focus:outline-none'
-                    value={note.content}
-                    onChange={(e) => setNote({ ...note, content: e.target.value })}
+                  <ReactQuill 
+                    theme="snow" 
+                    value={note.content || ""} 
+                    onChange={(htmlContent) => setNote({ ...note, content: htmlContent })} 
+                    className="h-64 mb-12" 
                   />
                 </div>
                 <input
