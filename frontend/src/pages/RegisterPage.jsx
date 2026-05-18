@@ -26,7 +26,11 @@ const RegisterPage = () => {
 
     setLoading(true)
     try {
-      const res = await api.post('/auth/register', { username, email, password })
+      const res = await api.post('/auth/register', {
+        username: username.trim(),
+        email: email.trim().toLowerCase(),
+        password
+      })
       login(res.data.user, res.data.token)
       toast.success('Account created successfully')
       navigate('/')

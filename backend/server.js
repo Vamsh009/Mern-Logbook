@@ -1,8 +1,7 @@
-// import express from 'express';
 import express from 'express';
 import cors from 'cors';
 import dotenv from "dotenv";
-import path from 'path'
+import path from 'path';
 import { fileURLToPath } from 'url';
 
 
@@ -26,26 +25,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());//middleware allows to parse JSON bodies
 
 if (process.env.NODE_ENV !== "production") {
-
   app.use(cors({
-    origin: (origin, callback) => {
-      if (!origin) {
-        return callback(null, true);
-      }
-
-      try {
-        const { hostname } = new URL(origin);
-        const allowedHosts = ["localhost", "127.0.0.1"];
-
-        if (allowedHosts.includes(hostname)) {
-          return callback(null, true);
-        }
-      } catch (error) {
-        return callback(error);
-      }
-
-      return callback(new Error(`CORS blocked origin: ${origin}`));
-    },
+    origin: true,
     credentials: true,
   }));
 }
@@ -73,7 +54,7 @@ if (process.env.NODE_ENV === "production") {
 connectDB().then(() => {
 
   app.listen(PORT, () => {
-    console.log('Server is running on port 3000');
+    console.log(`Server is running on port ${PORT}`);
   });
 });
 

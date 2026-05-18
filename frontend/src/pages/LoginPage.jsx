@@ -21,7 +21,10 @@ const LoginPage = () => {
 
     setLoading(true)
     try {
-      const res = await api.post('/auth/login', { email, password })
+      const res = await api.post('/auth/login', {
+        email: email.trim().toLowerCase(),
+        password
+      })
       login(res.data.user, res.data.token)
       toast.success('Logged in successfully')
       navigate('/')
