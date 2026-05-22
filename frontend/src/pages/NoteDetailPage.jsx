@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../lib/axios'
-import { ArrowLeftIcon, SaveIcon, Trash2Icon } from 'lucide-react'
+import { ArrowLeftIcon, SaveIcon, SparklesIcon, Trash2Icon } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
@@ -13,6 +13,8 @@ const NoteDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [tagInput, setTagInput] = useState('');
+  const [summary , setSummary] = useState('');
+  const [isSummarizing, setIsSummarizing] = useState(false);
 
   const navigate = useNavigate();
 
@@ -79,6 +81,27 @@ const NoteDetailPage = () => {
     }
   }
 
+  const handleSummarize = async () => {
+    const plainTextContent = note.content?.replace(/<[^>]*>?/gm, '') || '';
+
+    if (!plainTextContent.trim()) {
+      toast.error("Note content is empty. Cannot summarize.")
+      return
+    }
+    
+    setIsSummarizing(true);
+    try {
+      const res = await api.post('/notes/summarize', { content: plainTextContent })
+      setSummary(res.data.summary);
+      toast.success("Summary generated successfully")
+    } catch (error) {
+      console.log("Error generating summary:", error)
+      toast.error(error.response?.data?.message || "Failed to generate summary")
+    } finally {
+      setIsSummarizing(false);
+    }
+  }
+
   if (loading) {
     return <div className='min-h-screen flex items-center justify-center'>
       <span className='loading loading-spinner loading-lg text-[#e7d8bd]'></span>
@@ -136,6 +159,7 @@ const NoteDetailPage = () => {
                     onChange={(htmlContent) => setNote({ ...note, content: htmlContent })} 
                     className="h-64 mb-12" 
                   />
+
                 </div>
                 <input
                   type='text'
@@ -143,7 +167,26 @@ const NoteDetailPage = () => {
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   className='input input-bordered w-full bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-[#e7d8bd] focus:outline-none'
-                />
+                  />
+                  <div className='mt-4 flex justify-end'>
+                    <button
+                      type='button'
+                      onClick={handleSummarize}
+                      className='btn rounded-xl border-0 bg-slate-800 px-5 text-[#e7d8bd] hover:bg-slate-700 disabled:bg-slate-800/60 disabled:text-slate-500'
+                      disabled={isSummarizing}
+                    >
+                      <SparklesIcon className="size-4" />
+                      {isSummarizing ? "Summarizing..." : "AI Summary"}
+                    </button>
+                  </div>
+                  {summary && (
+                    <div className="mt-4 mb-4 p-4 rounded-xl bg-slate-800 border border-[#e7d8bd]/30">
+                      <h3 className="text-[#e7d8bd] font-semibold mb-2 flex items-center gap-2">
+                        <SparklesIcon className="size-4" /> AI Summary
+                      </h3>
+                      <p className="text-slate-300 text-sm whitespace-pre-wrap">{summary}</p>
+                    </div>
+                  )}
 
                 <div className='card-actions justify-end py-5'>
                   <button type='submit' className='btn rounded-xl border-0 bg-[#e7d8bd] px-5  text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400' disabled={saving}>
