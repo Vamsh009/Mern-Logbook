@@ -43,16 +43,16 @@ const CreatePage = () => {
   return (
     <div className='min-h-screen'>
       <Navbar />
-      <div className='container mx-auto px-4 py-8'>
-        <div className='max-w-2xl mx-auto'>
-          <Link to={"/"} className='btn btn-ghost mb-6 text-slate-300 hover:bg-slate-800 hover:text-[#f1e5d0]'>
+      <main className='mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8'>
+        <div>
+          <Link to={"/"} className='btn btn-ghost mb-6 h-10 min-h-10 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#f1e5d0]'>
             <ArrowLeftIcon className='size-5' />
             Back to Home
           </Link>
 
-          <div className='card rounded-2xl overflow-hidden bg-slate-900 border-t-4 border-[#e7d8bd] shadow-xl shadow-slate-950/30'>
-            <div className='card-body'>
-              <h2 className='card-title text-2xl mb-4 text-slate-50'>Create New Note</h2>
+          <div className='card overflow-hidden rounded-lg border border-slate-800 border-t-[#e7d8bd] bg-slate-900/95 shadow-xl shadow-slate-950/30'>
+            <div className='card-body p-5 sm:p-6'>
+              <h2 className='mb-4 text-2xl font-semibold text-slate-50'>Create New Note</h2>
               <form onSubmit={handleSubmit}>
                 <div className='form-control mb-4'>
                   <label className="label">
@@ -73,7 +73,7 @@ const CreatePage = () => {
                     theme="snow" 
                     value={content} 
                     onChange={setContent} 
-                    className="h-64 mb-12" 
+                    className="mb-14 h-64" 
                   />
                 </div>
                 <input
@@ -83,8 +83,8 @@ const CreatePage = () => {
                   onChange={(e) => setTagInput(e.target.value)}
                   className='input input-bordered w-full bg-slate-950 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-[#e7d8bd] focus:outline-none'
                 />
-                <div className="card-actions justify-end mt-6">
-                  <button type='submit' className='btn rounded-xl border-0 bg-[#e7d8bd] px-5 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400' disabled={loading} >
+                <div className="mt-6 flex justify-end">
+                  <button type='submit' className='btn h-11 min-h-11 w-full rounded-lg border-0 bg-[#e7d8bd] px-5 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400 sm:w-auto' disabled={loading} >
                     {loading ? "Creating..." : "Create Note"}
                   </button>
                 </div>
@@ -96,7 +96,7 @@ const CreatePage = () => {
 
         </div>
 
-      </div>
+      </main>
     </div>
   )
 }

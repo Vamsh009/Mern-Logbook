@@ -22,7 +22,7 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());//middleware allows to parse JSON bodies
+app.use(express.json({ limit: "1mb" }));//middleware allows to parse JSON bodies
 
 if (process.env.NODE_ENV !== "production") {
   app.use(cors({

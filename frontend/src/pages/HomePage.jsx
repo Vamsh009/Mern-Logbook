@@ -53,14 +53,14 @@ const HomePage = () => {
     <div className='min-h-screen'>
       <Navbar />
 
-      <div className='max-w-7xl mx-auto p-4 mt-6'>
+      <main className='mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8'>
         {!user && (
-          <div className='rounded-3xl bg-slate-900 border border-slate-700 p-8 text-center text-slate-100 shadow-xl shadow-slate-950/40'>
-            <h2 className='text-3xl font-bold mb-4'>Welcome to LogBook</h2>
-            <p className='text-slate-300 mb-6'>Login or register to view and manage your notes.</p>
-            <div className='flex flex-col sm:flex-row justify-center gap-3'>
-              <Link to='/login' className='btn rounded-xl border-0 bg-[#e7d8bd] px-6 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0]'>Login</Link>
-              <Link to='/register' className='btn rounded-xl border-0 bg-slate-800 text-slate-100 hover:bg-slate-700'>Register</Link>
+          <div className='mx-auto max-w-2xl rounded-lg border border-slate-800 bg-slate-900/95 p-6 text-center text-slate-100 shadow-xl shadow-slate-950/30 sm:p-8'>
+            <h2 className='mb-3 text-2xl font-bold sm:text-3xl'>Welcome to LogBook</h2>
+            <p className='mb-6 text-slate-300'>Login or register to view and manage your notes.</p>
+            <div className='flex flex-col justify-center gap-3 sm:flex-row'>
+              <Link to='/login' className='btn h-11 min-h-11 rounded-lg border-0 bg-[#e7d8bd] px-6 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0]'>Login</Link>
+              <Link to='/register' className='btn h-11 min-h-11 rounded-lg border border-slate-700/70 bg-slate-800 text-slate-100 hover:border-slate-600 hover:bg-slate-700'>Register</Link>
             </div>
           </div>
         )}
@@ -70,13 +70,13 @@ const HomePage = () => {
         {user && !loading && notes.length === 0 && <NoteNotFound />}
 
         {user && notes.length > 0 && (
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:gap-6'>
             {notes.map((note) => (
               <NoteCard key={note._id} note={note} setNotes={setNotes} />
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   )
 }

@@ -29,33 +29,33 @@ const NoteCard = ({ note, setNotes }) => {
 
   return (
     <Link to={`/note/${note._id}`}
-      className="card rounded-2xl overflow-hidden bg-slate-900 hover:shadow-xl hover:shadow-slate-950/30 transition-all duration-200 border-t-4 border-solid border-[#e7d8bd] "
+      className="card h-full overflow-hidden rounded-lg border border-slate-800/80 border-t-[#e7d8bd] bg-slate-900/95 shadow-lg shadow-slate-950/20 transition-all duration-200 hover:-translate-y-1 hover:border-slate-700 hover:shadow-xl hover:shadow-slate-950/30"
 
     >
-      <div className='card-body '>
-        <h3 className=' card-title text-slate-50'>{note.title}</h3>
+      <div className='card-body flex h-full p-5'>
+        <h3 className='line-clamp-2 text-lg font-semibold leading-snug text-slate-50'>{note.title}</h3>
         <div 
-          className="mt-2 text-gray-700 quill-content"
+          className="quill-content mt-2 line-clamp-4 text-sm leading-6 text-slate-300"
           dangerouslySetInnerHTML={{ __html: cleanHTML }} 
         />
-        <div className='flex flex-wrap gap-2 mt-4'>
+        <div className='mt-4 flex flex-wrap gap-2'>
           {note.tags.map((tag, index) => (
             <span
               key={index}
-              className='text-md text-[#e7d8bd]'
+              className='rounded-full border border-[#e7d8bd]/20 bg-[#e7d8bd]/10 px-2.5 py-1 text-xs font-medium text-[#e7d8bd]'
             >
               #{tag}
 
             </span>
           ))}
         </div>
-        <div className='card-actions justify-between items-center mt-4'>
-          <span className='text-sm text-slate-400'>
+        <div className='mt-auto flex items-center justify-between gap-3 pt-5'>
+          <span className='min-w-0 truncate text-sm text-slate-400'>
             {formatDate(new Date(note.createdAt))}
           </span>
-          <div className='flex items-center gap-1 text-slate-300'>
+          <div className='flex shrink-0 items-center gap-1 text-slate-300'>
             <PenSquareIcon className='size-4' />
-            <button className='btn btn-ghost btn-xs  text-error' onClick={(e) => handleDelete(e, note._id)}>
+            <button className='btn btn-ghost btn-xs rounded-lg text-error hover:bg-red-500/10' onClick={(e) => handleDelete(e, note._id)}>
               <Trash2Icon className='size-4' />
             </button>
           </div>

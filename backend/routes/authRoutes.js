@@ -2,6 +2,7 @@ import express from "express";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/Users.js";
+import Note from "../models/Note.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -34,14 +35,19 @@ const createToken = (user) => {
 const toAuthUser = (user) => ({
   id: user._id,
   username: user.username,
-  email: user.useremail
+  email: user.useremail,
+  avatarUrl: user.avatarUrl || ""
 });
 
-const sendAuthResponse = (res, statusCode, user) => {
+const sendAuthResponse = async (res, statusCode, user) => {
   const token = createToken(user);
+  const noteCount = await Note.countDocuments({ user: user._id });
 
   return res.status(statusCode).json({
-    user: toAuthUser(user),
+    user: {
+      ...toAuthUser(user),
+      noteCount
+    },
     token
   });
 };
@@ -93,7 +99,7 @@ router.post("/register", async (req, res) => {
       password: hashedPassword
     });
 
-    return sendAuthResponse(res, 201, user);
+    return await sendAuthResponse(res, 201, user);
   } catch (error) {
     console.error("Error in user registration:", error);
 
@@ -134,7 +140,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    return sendAuthResponse(res, 200, user);
+    return await sendAuthResponse(res, 200, user);
   } catch (error) {
     console.error("Error in user login:", error);
 
@@ -147,9 +153,46 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/me", authMiddleware, async (req, res) => {
+  const noteCount = await Note.countDocuments({ user: req.user._id });
+
   return res.status(200).json({
-    user: toAuthUser(req.user)
+    user: {
+      ...toAuthUser(req.user),
+      noteCount
+    }
   });
+});
+
+router.put("/profile", authMiddleware, async (req, res) => {
+  try {
+    const avatarUrl = typeof req.body.avatarUrl === "string" ? req.body.avatarUrl.trim() : "";
+
+    if (avatarUrl && !avatarUrl.startsWith("data:image/")) {
+      return res.status(400).json({ message: "Profile picture must be an image" });
+    }
+
+    if (avatarUrl.length > 100000) {
+      return res.status(400).json({ message: "Profile picture is too large" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { avatarUrl },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    const noteCount = await Note.countDocuments({ user: req.user._id });
+
+    return res.status(200).json({
+      user: {
+        ...toAuthUser(user),
+        noteCount
+      }
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 });
 
 export default router;
