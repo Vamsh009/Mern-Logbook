@@ -39,11 +39,11 @@ const LoginPage = () => {
   return (
     <div className='min-h-screen'>
       <Navbar />
-      <div className='container mx-auto px-4 py-8'>
+      <main className='mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8'>
         <div className='max-w-md mx-auto'>
-          <div className='card rounded-2xl overflow-hidden bg-slate-900 border-t-4 border-[#e7d8bd] shadow-xl shadow-slate-950/30'>
-            <div className='card-body'>
-              <h2 className='card-title text-2xl mb-4 text-slate-50'>Login</h2>
+          <div className='card overflow-hidden rounded-lg border border-slate-800 border-t-[#e7d8bd] bg-slate-900/95 shadow-xl shadow-slate-950/30'>
+            <div className='card-body p-5 sm:p-6'>
+              <h2 className='mb-4 text-2xl font-semibold text-slate-50'>Login</h2>
               <form onSubmit={handleSubmit}>
                 <div className='form-control mb-4'>
                   <label className='label'>
@@ -72,7 +72,7 @@ const LoginPage = () => {
                 <div className='card-actions justify-end mt-6'>
                   <button
                     type='submit'
-                    className='btn rounded-xl border-0 bg-[#e7d8bd] px-5 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400'
+                    className='btn h-11 min-h-11 w-full rounded-lg border-0 bg-[#e7d8bd] px-5 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400 sm:w-auto'
                     disabled={loading}
                   >
                     {loading ? 'Logging in...' : 'Login'}
@@ -88,7 +88,7 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

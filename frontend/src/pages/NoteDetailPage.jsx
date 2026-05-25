@@ -120,22 +120,22 @@ const NoteDetailPage = () => {
   return (
     <div className='min-h-screen'>
       <Navbar />
-      <div className='container mx-auto px-4 py-8'>
-        <div className="max-w-2xl mx-auto">
+      <main className='mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8'>
+        <div>
 
           <div className='flex items-center justify-between mb-6'>
-            <Link to={"/"} className='btn btn-ghost text-slate-300 hover:bg-slate-800 hover:text-[#f1e5d0]'>
+            <Link to={"/"} className='btn btn-ghost h-10 min-h-10 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#f1e5d0]'>
               <ArrowLeftIcon className='size-5' />
               Back to Home
             </Link>
-            <button onClick={handleDelete} className='btn btn-outline rounded-xl border-red-400/70 text-red-300 hover:border-red-500 hover:bg-red-500 hover:text-white'>
+            <button onClick={handleDelete} className='btn btn-outline h-10 min-h-10 rounded-lg border-red-400/70 text-red-300 hover:border-red-500 hover:bg-red-500 hover:text-white'>
               <Trash2Icon className='h-5 w-5' />
 
             </button>
           </div>
 
-          <div className='card rounded-2xl overflow-hidden bg-slate-900 border-t-4 border-[#e7d8bd] shadow-xl shadow-slate-950/30'>
-            <div className='card-body'>
+          <div className='card overflow-hidden rounded-lg border border-slate-800 border-t-[#e7d8bd] bg-slate-900/95 shadow-xl shadow-slate-950/30'>
+            <div className='card-body p-5 sm:p-6'>
               <form onSubmit={handleSave}>
                 <div className='form-control mb-4'>
                   <label className='label'>
@@ -157,7 +157,7 @@ const NoteDetailPage = () => {
                     theme="snow" 
                     value={note.content || ""} 
                     onChange={(htmlContent) => setNote({ ...note, content: htmlContent })} 
-                    className="h-64 mb-12" 
+                    className="mb-14 h-64" 
                   />
 
                 </div>
@@ -172,7 +172,7 @@ const NoteDetailPage = () => {
                     <button
                       type='button'
                       onClick={handleSummarize}
-                      className='btn rounded-xl border-0 bg-slate-800 px-5 text-[#e7d8bd] hover:bg-slate-700 disabled:bg-slate-800/60 disabled:text-slate-500'
+                      className='btn h-11 min-h-11 w-full rounded-lg border border-slate-700/70 bg-slate-800 px-5 text-[#e7d8bd] hover:border-slate-600 hover:bg-slate-700 disabled:bg-slate-800/60 disabled:text-slate-500 sm:w-auto'
                       disabled={isSummarizing}
                     >
                       <SparklesIcon className="size-4" />
@@ -188,8 +188,8 @@ const NoteDetailPage = () => {
                     </div>
                   )}
 
-                <div className='card-actions justify-end py-5'>
-                  <button type='submit' className='btn rounded-xl border-0 bg-[#e7d8bd] px-5  text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400' disabled={saving}>
+                <div className='flex justify-end py-5'>
+                  <button type='submit' className='btn h-11 min-h-11 w-full rounded-lg border-0 bg-[#e7d8bd] px-5 text-slate-950 shadow-lg shadow-[#e7d8bd]/20 hover:bg-[#f1e5d0] disabled:bg-slate-700 disabled:text-slate-400 sm:w-auto' disabled={saving}>
                     <SaveIcon className='size-5' />
                     {saving ? "Saving..." : "Save Changes"}
                   </button>
@@ -198,7 +198,7 @@ const NoteDetailPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
 
   )
